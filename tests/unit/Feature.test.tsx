@@ -14,14 +14,15 @@ describe("Feature (component)", () => {
     fireEvent.change(screen.getByLabelText("Owner (optional)"), { target: { value: "Ari" } });
     fireEvent.click(screen.getByRole("button", { name: "Add to checklist" }));
     expect(screen.getByText("Bring snacks")).toBeInTheDocument();
-    expect(screen.getByText("Assigned to Ari")).toBeInTheDocument();
+    expect(screen.getByText("Owner · Ari")).toBeInTheDocument();
   });
 
-  it("shows a connecting state when room is null", () => {
+  it("keeps the useful launch visible while the room connects", () => {
     render(<Feature room={null} config={config} />);
-    // Most templates show "Connecting…" while the room is null. Apps with a
-    // custom waiting state can override this test.
-    const heading = screen.getAllByRole("heading", { level: 1 })[0];
-    expect(heading).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "A clear plan for the next thing." }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Preparing your shared space…")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Start with a baseline" })).toBeDisabled();
   });
 });
